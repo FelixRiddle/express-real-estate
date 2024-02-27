@@ -4,9 +4,8 @@ const express = require('express');
 
 const { mysqlConn } = require("app-models");
 
-const routes = require("./routes/index")
-// const { createPublicUserFolder } = require("../user/userFolder");
-const { createPublicUserFolder } = require("../lib/user/userFolder/userFolder");
+const routes = require("./routes/index");
+const UsersFolder = require("../user/UsersFolder");
 
 /**
  * Server
@@ -16,8 +15,9 @@ module.exports = class Server {
         const app = express();
         this.app = app;
         
-        // Public user folder, so they upload thingies
-        createPublicUserFolder();
+        // Public user folder
+        const usersFolder = new UsersFolder();
+        usersFolder.create();
     }
     
     /**

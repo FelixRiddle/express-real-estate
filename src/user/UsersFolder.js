@@ -5,16 +5,33 @@ const fs = require("node:fs");
  */
 module.exports = class UsersFolder {
     constructor() {
-        
+        this.folderPath = "public/user";
     }
     
     // --- Operations ---
+    /**
+     * Create folder
+     */
+    create() {
+        try {
+            fs.mkdirSync("public", { recursive: true, force: true });
+        } catch(err) {
+            
+        }
+        
+        try {
+            fs.mkdirSync(this.folderPath, { recursive: true, force: true, });
+        } catch(err) {
+            
+        }
+    }
+    
     /**
      * Delete user folder
      */
     delete() {
         try {
-            fs.rmSync("public/user", { recursive: true, force: true });
+            fs.rmSync(this.folderPath, { recursive: true, force: true });
         } catch(err) {
             // Directory may not exist
         }
