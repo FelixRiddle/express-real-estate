@@ -5,8 +5,8 @@ const {
     PropertyModel
 } = require("../../../../mappings/models/index.js");
 
-const userFolderMiddleware = require("../../../middleware/user/userFolderMiddleware.js");
-const { relativePropertyFolder } = require("../../../lib/user/userFolder/property/propertyFolder.js")
+const userFolderMiddleware = require("../../../../middleware/user/userFolderMiddleware.js");
+const { relativePropertyFolder } = require("../../../../lib/user/userFolder/property/propertyFolder.js");
 
 const publishPropertyRouter = express.Router();
 

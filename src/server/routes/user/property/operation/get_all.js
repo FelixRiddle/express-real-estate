@@ -10,7 +10,7 @@ const {
 const {
     relativePropertyFolder,
     relativePropertyImages
-} = require("../../../../../user/userFolder/property/PropertyFolder.js")
+} = require("../../../../../lib/user/userFolder/property/propertyFolder");
 const userFolder = require("../../../../../lib/user/userFolder/userFolder.js");
 
 const getAllRoutes = express.Router();

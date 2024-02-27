@@ -5,7 +5,8 @@ const express = require('express');
 const { mysqlConn } = require("app-models");
 
 const routes = require("./routes/index")
-const { createPublicUserFolder } = require("../user/userFolder");
+// const { createPublicUserFolder } = require("../user/userFolder");
+const { createPublicUserFolder } = require("../lib/user/userFolder/userFolder");
 
 /**
  * Server

@@ -7,6 +7,8 @@ async function startServer() {
     const server = new Server();
     
     await server.setup();
+    
+    server.serve();
 }
 
 /**
@@ -15,6 +17,7 @@ async function startServer() {
 module.exports = async function serverMain(args) {
     // Seed categories
     if(args.serve) {
+        console.log(`SErve given`);
         // Start server
         startServer();
     }

@@ -43,6 +43,8 @@ let args = parser.parse_args();
 /**
  * Execute commands
  */
-module.exports = async function executeCommands() {
+async function executeCommands() {
     await serverMain(args);
-};
+}
+
+executeCommands();

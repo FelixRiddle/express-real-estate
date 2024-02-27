@@ -2,7 +2,7 @@ const {
     PropertyModel
 } = require("../../mappings/models/index.js");
 
-const { serverUrl } = require("../../controllers/env/env.js");
+const { serverUrl } = require("../../env/index");
 const propertyFolder = require("../../lib/user/userFolder/property/propertyFolder.js");
 const userFolder = require("../../lib/user/userFolder/userFolder.js");
 
@@ -35,7 +35,12 @@ module.exports = async function userFolderMiddleware(req, res, next) {
         const user = req.user.get({plain: true});
         if(!user) {
             console.log(`User doesn't exists!`);
-            return res.redirect(`${serverUrl()}/user/property/admin`);
+            return res.send({
+                messages: [{
+                    error: true,
+                    message: "User folder error"
+                }]
+            });
         }
         
         // Create user folder
@@ -45,7 +50,12 @@ module.exports = async function userFolderMiddleware(req, res, next) {
         const { id } = req.params;
         if(!id) {
             console.log(`No property id given`);
-            return res.redirect(`${serverUrl()}/user/property/admin`);
+            return res.send({
+                messages: [{
+                    error: true,
+                    message: "User folder error"
+                }]
+            });
         }
         
         // Validate that the property exists
@@ -54,7 +64,12 @@ module.exports = async function userFolderMiddleware(req, res, next) {
         console.log(`Id: ${id}`);
         if(!property) {
             console.log(`Property not found!`);
-            return res.redirect(`${serverUrl()}/user/property/admin`);
+            return res.send({
+                messages: [{
+                    error: true,
+                    message: "User folder error"
+                }]
+            });
         }
         console.log(`Property does exist, pass`);
         
@@ -66,7 +81,12 @@ module.exports = async function userFolderMiddleware(req, res, next) {
         if(userId !== propOwnerId) {
             console.log(`User id doesn't match property id!`);
             console.log(`${userId} != ${propOwnerId}`);
-            return res.redirect(`${serverUrl()}/user/property/admin`);
+            return res.send({
+                messages: [{
+                    error: true,
+                    message: "User folder error"
+                }]
+            });
         }
         console.log(`User owns the property`);
         

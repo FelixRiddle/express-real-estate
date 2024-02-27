@@ -5,7 +5,7 @@ const {
 } = require("../../../../mappings/models/index.js");
 
 const validatePropertyData = require("../../../../middleware/property/validatePropertyData");
-const { envServerUrlOrDefault } = require("../../../../env/envServerUrlOrDefault");
+const { envServerUrlOrDefault } = require("../../../../env/index");
 
 const editRouter = express.Router();
 

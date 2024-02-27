@@ -1,7 +1,7 @@
 const express = require("express");
 
 const { CategoryModel, PriceModel, PropertyModel } = require("../../../../mappings/models/index.js");
-const { relativePropertyImagesNorm } = require("../../../lib/user/userFolder/property/propertyFolder.js");
+const { relativePropertyImagesNorm } = require("../../../../lib/user/userFolder/property/propertyFolder");
 
 const getAllRoutes = express.Router();
 
