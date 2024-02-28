@@ -17,7 +17,7 @@ async function startServer() {
 module.exports = async function serverMain(args) {
     // Seed categories
     if(args.serve) {
-        console.log(`SErve given`);
+        console.log(`Serve given`);
         // Start server
         startServer();
     }
