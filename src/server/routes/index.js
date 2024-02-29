@@ -1,6 +1,10 @@
 const express = require("express");
 
-const { protectRoute } = require("express-authentication");
+const {
+    publicMiddleware: {
+        authenticatedUserProtection
+    }
+} = require("express-authentication");
 const propertyRoutes = require("./property/index.js");
 const userRoutes = require("./user/index.js");
 
@@ -8,7 +12,7 @@ const routes = express.Router();
 
 // Open routes
 routes.use("/property", propertyRoutes);
-routes.use("/user", protectRoute, userRoutes);
+routes.use("/user", authenticatedUserProtection, userRoutes);
 
 // --- Public ---
 // Public assets folder

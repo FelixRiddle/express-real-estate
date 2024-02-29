@@ -1,6 +1,8 @@
 const { ArgumentParser } = require("argparse");
 
 const serverMain = require("./server");
+const { seederArgs } = require("./seeder");
+const tablesMain = require("./tables");
 
 const parser = new ArgumentParser({
     description: "Argparse example"
@@ -45,6 +47,10 @@ let args = parser.parse_args();
  */
 async function executeCommands() {
     await serverMain(args);
+    
+    await seederArgs(args);
+    
+    await tablesMain(args);
 }
 
 executeCommands();

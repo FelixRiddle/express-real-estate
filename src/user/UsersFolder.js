@@ -11,6 +11,8 @@ module.exports = class UsersFolder {
     // --- Operations ---
     /**
      * Create folder
+     * 
+     * Gets the job done regardless of errors
      */
     create() {
         try {
@@ -24,6 +26,8 @@ module.exports = class UsersFolder {
         } catch(err) {
             
         }
+        
+        return this;
     }
     
     /**

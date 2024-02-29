@@ -23,6 +23,7 @@
     "express": "^4.18.2",
     "express-authentication": "github:FelixRiddle/express-authentication",
     "felixriddle.checkpoint": "^2.0.3",
+    "good-roots-assets": "github:FelixRiddle/good-roots-assets",
     "multer": "^1.4.5-lts.1",
     "uuid": "^9.0.1"
   },
