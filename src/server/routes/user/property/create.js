@@ -57,11 +57,11 @@ createPropertyRouter.post(`/create`, validatePropertyData, async (req, res) => {
         
         // Store data
         const propertyModel = PropertyModel();
-        await propertyModel.create(property);
-        let id = property.id;
-        console.log(`Property id: `, id);
+        const propertyCreated = await propertyModel.create(property);
+        const propertyId = propertyCreated.id;
+        console.log(`Property id: `, propertyId);
         
-        let setImageUrl = `/user/property/set_image/${id}`;
+        let setImageUrl = `/user/property/set_image/${propertyId}`;
         return res.send({
             propertyCreated: true,
             nextUrl: setImageUrl,

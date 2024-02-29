@@ -5,7 +5,7 @@ const {
     PropertyModel
 } = require("../../../../mappings/models/index.js");
 
-const { relativePropertyFolder } = require("../../../../mappings/models/index");
+const { relativePropertyFolder } = require("../../../../lib/user/userFolder/property/propertyFolder.js");
 
 const deleteRouter = express.Router();
 
@@ -19,6 +19,7 @@ deleteRouter.post("/delete/:id", async (req, res) => {
         if(!property) {
             console.log(`Property doesn't exists!`);
             return res.send({
+                propertyDeleted: false,
                 messages: [{
                     message: "Error when trying to delete the property, the property doesn't exists!",
                     error: true,
@@ -31,6 +32,7 @@ deleteRouter.post("/delete/:id", async (req, res) => {
         if(property.userId.toString() !== req.user.id.toString()) {
             console.log(`The user is not the owner of the property!(/delete)`);
             return res.send({
+                propertyDeleted: false,
                 messages: [{
                     message: "Error when trying to delete the property, you're not the owner of it.",
                     error: true,
@@ -49,6 +51,7 @@ deleteRouter.post("/delete/:id", async (req, res) => {
             // If we can't delete the folder, don't delete the property either
             console.error(err);
             return res.send({
+                propertyDeleted: false,
                 messages: [{
                     message: "Error when trying to delete the property.",
                     error: true,
@@ -60,6 +63,7 @@ deleteRouter.post("/delete/:id", async (req, res) => {
         await propertyController.destroy();
         
         return res.send({
+            propertyDeleted: true,
             messages: [{
                 message: "Property deleted",
                 error: false,
@@ -68,6 +72,7 @@ deleteRouter.post("/delete/:id", async (req, res) => {
     } catch(err) {
         console.log(err);
         return res.send({
+            propertyDeleted: false,
             messages: [{
                 message: "Error when trying to delete the property.",
                 error: true,

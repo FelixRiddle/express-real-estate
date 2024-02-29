@@ -29,8 +29,6 @@ test('Successful property creation', async function() {
     await api.confirmUserEmailWithPrivateKey(userData.email);
     const loginRes = await api.loginGetJwt();
     
-    // TODO: The problem here is that the axios instance is using the 
-    // authentication url.
     // Create new axios instance, for this project server
     const realEstateAxios = createAxiosInstance(SERVER_URL_MAPPINGS.REAL_ESTATE, "", loginRes.token);
     
