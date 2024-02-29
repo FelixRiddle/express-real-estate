@@ -1,123 +1,83 @@
-// /**
-//  * Edit endpoint
-//  * 
-//  * For data validation it uses the same as create endpoint so there's no need to test that
-//  */
-// import dotenv from "dotenv";
+const { v4: uuidv4 } = require("uuid");
+const dotenv = require("dotenv");
 
-// import { serverUrl } from "../../../../src/controllers/env/env.js";
-// import { AuthAPI, confirmUserEmailWithPrivateKey } from "express-authentication";
-// import PropertyAPI from "../../../../src/api/user/property/PropertyAPI.js";
+const { AuthAPI, UserAPI } = require("express-authentication");
 
-// // For data validation it uses the same as create endpoint so there's no need to test that
-// describe("Edit", () => {
-//     // Setup dotenv
-//     dotenv.config({
-//         path: ".env"
-//     });
+const { AUTHENTICATION, REAL_ESTATE } = require("../../../../mappings/env/SERVER_URL_MAPPINGS");
+const PropertyAPI = require("../../../../api/property/PropertyAPI");
+const createAxiosInstance = require("../../../../public/js/axios/createAxiosInstance");
+
+test("Delete property", async () => {
+    // Setup dotenv
+    dotenv.config({
+        path: ".env"
+    });
     
-//     // Create user data
-//     const userData = {
-//         name: "Test Edit Schmidt",
-//         email: "test_edit_property_email@email.com",
-//         password: "asd12345",
-//         confirmPassword: "asd12345"
-//     };
+    // Create user data
+    const email = `alistar_${uuidv4()}@email.com`;
+    const userData = {
+        name: "Alistar",
+        email: email,
+        password: "asd12345",
+        confirmPassword: "asd12345"
+    };
     
-//     const url = serverUrl();
-//     const api = new AuthAPI(userData, url);
+    // Auth api
+    const api = new AuthAPI(userData, AUTHENTICATION);
+    await api.registerUser();
+    await api.confirmUserEmailWithPrivateKey(userData.email);
+    const loginRes = await api.loginGetJwt();
     
-//     // Run asynchronous work before the tests start
-//     beforeEach(async function() {
-//         // Register, and login
-//         await api.createLoginGetInstance();
-//     });
+    // --- Property manipulation ---
+    const property = {
+        title: "Luxury house",
+        description: "This is a luxury house",
+        rooms: 3,
+        parking: 2,
+        bathrooms: 3,
+        street: 'Norris Road 1223',
+        latitude: 35.0831751,
+        longitude: -90.022207,
+        priceId: 5,
+        categoryId: 4,
+        image: "",
+        // This is here but in the endpoint it does nothing
+        published: true,
+        userId: this.userId,
+    };
     
-//     // Run code after each test is complete
-//     afterEach(async () => {
-//         await api.deleteUser();
-//     });
+    // Property api
+    const realEstateAxios = createAxiosInstance(REAL_ESTATE, "", loginRes.token);
+    const propertyApi = new PropertyAPI(realEstateAxios);
+    // We need to check that the property was successfully created
+    // Otherwise the test is useless
+    const createRes = await propertyApi.createProperty(property);
     
-//     // For data validation it uses the same as create endpoint so there's no need to test that
-//     it('Success property edit', async function() {
-//         const propertyApi = new PropertyAPI(api.instance);
-        
-//         // Create some property
-//         const property = {
-//             title: "Shack",
-//             description: "Success property edit",
-//             rooms: 3,
-//             parking: 2,
-//             bathrooms: 3,
-//             street: 'Norris Road 1223',
-//             latitude: 35.0831751,
-//             longitude: -90.022207,
-//             priceId: 5,
-//             categoryId: 4,
-//             image: "",
-//             // This is here but in the endpoint it does nothing
-//             published: true,
-//             userId: this.userId,
-//         };
-//         await propertyApi.createProperty(property);
-        
-//         // Get property
-//         const properties = await propertyApi.getAll();
-//         const serverProperty = properties.properties[0];
-        
-//         // Update its title
-//         const newPropertyTitle = "Luxury House";
-//         serverProperty.title = newPropertyTitle;
-        
-//         // Update it
-//         const editPropertyRes = await propertyApi.editPropertyById(serverProperty.id, serverProperty);
-        
-//         // Delete property
-//         await propertyApi.deleteAll();
-        
-//         expect(editPropertyRes.updated).toBe(true);
-//     });
+    // Get property
+    const properties = await propertyApi.getAll();
+    const serverProperty = properties.properties[0];
     
-//     it('Title updated', async () => {
-//         const propertyApi = new PropertyAPI(api.instance);
-        
-//         // Create some property
-//         const property = {
-//             title: "Shack",
-//             description: "Title updated",
-//             rooms: 3,
-//             parking: 2,
-//             bathrooms: 3,
-//             street: 'Norris Road 1223',
-//             latitude: 35.0831751,
-//             longitude: -90.022207,
-//             priceId: 5,
-//             categoryId: 4,
-//             image: "",
-//             // This is here but in the endpoint it does nothing
-//             published: true,
-//         };
-//         await propertyApi.createProperty(property);
-        
-//         // Get property
-//         // TODO: This has failed once for some reason.
-//         const properties = await propertyApi.getAll();
-//         const serverProperty = properties.properties[0];
-        
-//         // Update its title
-//         const newPropertyTitle = "Title updated";
-//         serverProperty.title = newPropertyTitle;
-        
-//         // Update it
-//         await propertyApi.editPropertyById(serverProperty.id, serverProperty);
-        
-//         // Fetch again
-//         const updatedProperties = await propertyApi.getAll();
-//         const updatedProperty = updatedProperties.properties[0];
-        
-//         // Now delete every user property
-//         await propertyApi.deleteAll();
-        
-//         expect(updatedProperty.title === newPropertyTitle).toBe(true);
-//     });
-// });
+    // Update its title
+    const newPropertyTitle = "My Shack";
+    serverProperty.title = newPropertyTitle;
+    const editPropertyRes = await propertyApi.editPropertyById(serverProperty.id, serverProperty);
+    
+    // Fetch again
+    const updatedProperties = await propertyApi.getAll();
+    const updatedProperty = updatedProperties.properties[0];
+    
+    // Now delete every user property
+    await propertyApi.userDeleteAll();
+    
+    // --- Delete user ---
+    const userApi = UserAPI.fromAuthenticatedAPI(api);
+    await userApi.delete();
+    
+    // Definitions
+    const propCreated = createRes.propertyCreated;
+    const nonZeroProperties = properties.properties.length >= 0;
+    const propertyUpdated = editPropertyRes.updated;
+    const titleUpdated = updatedProperty.title === newPropertyTitle;
+    
+    expect(propCreated && nonZeroProperties && propertyUpdated && titleUpdated).toBe(true);
+});
