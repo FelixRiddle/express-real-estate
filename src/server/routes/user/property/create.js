@@ -1,8 +1,9 @@
 const express = require("express");
 
 const {
-    PropertyModel
-} = require("app-models");
+    PropertyModel,
+    UserModel,
+} = require("../../../../mappings/models/index");
 
 const validatePropertyData = require("../../../../middleware/property/validatePropertyData");
 
@@ -27,11 +28,16 @@ createPropertyRouter.post(`/create`, validatePropertyData, async (req, res) => {
         } = req.body.property;
         
         // Get user 'id' and rename it to 'userId'
-        const { id: userId } = req.user;
+        const user = req.user;
+        const { id: userId } = user;
         
-        // Store data
-        const propertyModel = PropertyModel();
-        const property = await propertyModel.create({
+        // Find user
+        const foundUser = await UserModel().findByPk(userId);
+        console.log(`User found: `, foundUser);
+        
+        console.log(`User: `, user);
+        console.log(`User id: `, userId);
+        const property = {
             // id(The uuid is generated automatically by the database)
             title,
             description,
@@ -46,8 +52,14 @@ createPropertyRouter.post(`/create`, validatePropertyData, async (req, res) => {
             userId,
             priceId,
             categoryId,
-        });
+        };
+        console.log(`Property: `, property);
+        
+        // Store data
+        const propertyModel = PropertyModel();
+        await propertyModel.create(property);
         let id = property.id;
+        console.log(`Property id: `, id);
         
         let setImageUrl = `/user/property/set_image/${id}`;
         return res.send({

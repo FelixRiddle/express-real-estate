@@ -8,6 +8,7 @@ const {
     DebugPropertyImageUpload,
     Price,
     Property,
+    User,
 } = require("app-models");
 
 /**
@@ -35,6 +36,10 @@ function PropertyModel() {
     return new Property();
 }
 
+function UserModel() {
+    return new User();
+}
+
 module.exports = {
     Category,
     CategoryModel,
@@ -47,4 +52,7 @@ module.exports = {
     
     Property,
     PropertyModel,
+    
+    User,
+    UserModel,
 };

@@ -14,7 +14,6 @@ test('Successful property creation', async function() {
     
     // Create user data
     const email = `alistar_${uuidv4()}@email.com`;
-    console.log(`Email: ${email}`);
     const userData = {
         name: "Alistar",
         email: email,
@@ -23,16 +22,12 @@ test('Successful property creation', async function() {
     };
     
     const url = SERVER_URL_MAPPINGS.AUTHENTICATION;
-    console.log(`Url: `, url);
     const api = new AuthAPI(userData, url);
     
     // Create user and login
     const registerRes = await api.registerUser();
-    console.log(`Register res: `, registerRes);
-    console.log(`Backdoor server url: `, process.env.BACKDOOR_SERVER_ACCESS_URL);
     await api.confirmUserEmailWithPrivateKey(userData.email);
     const loginRes = await api.loginGetJwt();
-    console.log(`Login res: `, loginRes);
     
     // TODO: The problem here is that the axios instance is using the 
     // authentication url.
@@ -57,7 +52,6 @@ test('Successful property creation', async function() {
         image: "",
         // This is here but in the endpoint it does nothing
         published: true,
-        userId: this.userId,
     };
     const propertyCreatedResult = await propertyApi.createProperty(property);
     
