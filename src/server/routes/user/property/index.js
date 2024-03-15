@@ -1,6 +1,7 @@
 const express = require("express");
 
 // Routers
+const adminRoutes = require("./admin.js");
 const createPropertyRouter = require("./create.js");
 const deleteRouter = require("./delete.js");
 const editRouter = require("./edit.js");
@@ -11,6 +12,7 @@ const publishPropertyRouter = require("./publish_property");
 const propertyRoutes = express.Router();
 
 // Use these routers
+propertyRoutes.use(adminRoutes);
 propertyRoutes.use(createPropertyRouter);
 propertyRoutes.use(deleteRouter);
 propertyRoutes.use(editRouter);
