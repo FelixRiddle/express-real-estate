@@ -15,7 +15,12 @@ const admin = async(req, res) => {
         if(!pageExpression.test(page)) {
             // Show the first page then
             console.log(`Didn't pass expression validation, redirecting to first page!`);
-            return res.redirect(`/user/property/admin?page=1`);
+            return res.send({
+                messages:[{
+                    message:"Unknown error",
+                    error: true,
+                }]
+            });
         }
         
         // User data
@@ -77,7 +82,6 @@ const admin = async(req, res) => {
         }
         
         return res.send({
-            page: "My Properties",
             properties,
             // Total pages
             pages: Math.ceil(total / limit),
@@ -86,17 +90,15 @@ const admin = async(req, res) => {
             total,
             offset: skip,
             limit,
-            user,
+            messages: [],
         });
     } catch(err) {
         console.error(err);
         return res.send({
-            messages:[
-                {
+            messages:[{
                     message:"Unknown error",
                     error: true,
-                }
-            ]
+            }]
         });
     }
 }
