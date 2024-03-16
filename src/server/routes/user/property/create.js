@@ -9,7 +9,11 @@ const validatePropertyData = require("../../../../middleware/property/validatePr
 
 const createPropertyRouter = express.Router();
 
-// FIX: This has no validation???
+/**
+ * Create property
+ * 
+ * Validation is in the middleware
+ */
 createPropertyRouter.post(`/create`, validatePropertyData, async (req, res) => {
     // Insert on the database
     try {

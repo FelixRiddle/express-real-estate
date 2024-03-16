@@ -1,3 +1,5 @@
+// WARNING: This is deprecated
+// Go to good-roots-ts-api to perform tests
 const { v4: uuidv4 } = require("uuid");
 const dotenv = require("dotenv");
 
