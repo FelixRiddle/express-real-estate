@@ -8,7 +8,7 @@ async function startServer() {
     
     await server.setup();
     
-    server.serve();
+    await server.serve();
 }
 
 /**

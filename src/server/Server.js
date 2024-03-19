@@ -3,6 +3,7 @@ const cors = require('cors');
 const express = require('express');
 
 const { mysqlConn } = require("app-models");
+const ConfMap = require("felixriddle.configuration-mappings");
 
 const routes = require("./routes/index");
 const UsersFolder = require("../user/UsersFolder");
@@ -23,11 +24,10 @@ module.exports = class Server {
     /**
      * Start serving requests
      */
-    serve() {
-        // Open server
-        this.app.listen(process.env.SERVER_PORT, () => {
-            console.log(`Server running at http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`);
-        });
+    async serve() {
+        // Complete implementation of port(env, default and ephemeral) management
+        const locSelector = new ConfMap.LocationSelection();
+        await locSelector.selectLocation(this.app);
     }
     
     /**
